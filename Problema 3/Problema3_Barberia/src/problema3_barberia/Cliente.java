@@ -16,6 +16,7 @@ public class Cliente extends Thread{
     ArrayList<String> cola;
     
     
+    
     public Cliente(Barberia barberia){
         this.barberia = barberia;
         this.cola = new ArrayList<String>();
@@ -30,40 +31,29 @@ public class Cliente extends Thread{
     @Override
     public void run() {
         while (true){
-            if(cola.size()<1){
+            if(barberia.cola.size()<1){
                 vent.colaText.setText(0+"");
             }else{
-                vent.colaText.setText((cola.size()-1)+"");
+                vent.colaText.setText((barberia.cola.size()-1)+"");
             }
             vent.colaTextArea.setText("");
-            for(int i=0;i<cola.size();i++){
+            for(int i=0;i<barberia.cola.size();i++){
                 if(i>0){
-                    vent.colaTextArea.append("Cliente "+cola.get(i)+"\n");
+                    vent.colaTextArea.append("Cliente "+barberia.cola.get(i)+"\n");
                 }
-            }
-            
-            if (cola.size()>0){
-                if(barberia.getBarbero1().isBussy()){
-                    System.out.println("Barbero 1 esta ocupado "+barberia.getBarbero1().isBussy());
-                    if(!barberia.getBarbero2().isBussy()){
-                        System.out.println("Barbero 2 esta ocupado "+barberia.getBarbero2().isBussy());
-                        try {
-                            barberia.getBarbero2().cortarPelo(cola.remove(0));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }else{
-                    System.out.println("Barbero 1 esta ocupado "+barberia.getBarbero1().isBussy());
-                    try {
-                        barberia.getBarbero1().cortarPelo(cola.remove(0));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }else{
-                System.out.println(cola.size()+" tam cola");
             }
         }
+    }
+    
+    public synchronized void cortarPelo(String name,Barbero barber) throws InterruptedException {
+        if(barber.isAsSleep()){
+            vent.logTextArea.append(barber.getNombre()+": Despertó \n");
+            barber.isAsSleep=false;
+        }
+        barber.isBussy = true;
+        vent.logTextArea.append(barber.getNombre()+ ": Cortando el pelo a Cliente " + name+"\n");
+        sleep(8000);
+        vent.logTextArea.append(barber.getNombre()+ ": Terminó de cortar el pelo a Cliente "+ name+"\n");
+        barber.isBussy = false;
     }
 }

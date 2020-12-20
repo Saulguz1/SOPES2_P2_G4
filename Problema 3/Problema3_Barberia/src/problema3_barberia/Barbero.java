@@ -12,8 +12,8 @@ package problema3_barberia;
 public class Barbero extends Thread{
     private Barberia barberia;
     private String nombre;
-    private boolean isAsSleep = false;
-    private boolean isBussy = false;
+    public boolean isAsSleep = false;
+    public boolean isBussy = false;
     Ventana vent;
     
     public Barbero(Barberia barberia, String nombre){
@@ -21,6 +21,9 @@ public class Barbero extends Thread{
         this.nombre = nombre;
     }
     
+    public String getNombre(){
+        return nombre;
+    }
     
     public boolean isAsSleep() {
         return isAsSleep;
@@ -32,13 +35,56 @@ public class Barbero extends Thread{
     
     @Override
     public void run() {
+        
+        
+        
+        
+        
         try {
              vent.logTextArea.append(this.nombre+": Inicia cuaje \n");
             dormir();
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
+        while(true){
+            
+            if (barberia.cola.size()>0){
+                if(!isBussy()){
+                    
+                    System.out.println(nombre+" esta docupado "+isBussy);
+                    try {
+                            if(barberia.cola.size()>0){
+                                cortarPelo(barberia.cola.remove(0),this);
+                            }
+                        } catch (InterruptedException e) {
+                            System.out.println(nombre+" Error con este barpero "+isBussy);
+                            System.out.println(e.toString());
+                        }
+                }
+            }else{
+                System.out.println(barberia.cola.size()+" tam cola");
+            }
+            if(!isAsSleep){
+                try {
+                    dormir();
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         
+    }
+    
+    public synchronized void cortarPelo(String name,Barbero barber) throws InterruptedException {
+        if(barber.isAsSleep()){
+            vent.logTextArea.append(barber.getNombre()+": Despertó \n");
+            barber.isAsSleep=false;
+        }
+        barber.isBussy = true;
+        vent.logTextArea.append(barber.getNombre()+ ": Cortando el pelo a Cliente " + name+"\n");
+        sleep(10000);
+        vent.logTextArea.append(barber.getNombre()+ ": Terminó de cortar el pelo a Cliente "+ name+"\n");
+        barber.isBussy = false;
     }
     
     public synchronized void dormir() throws InterruptedException {
@@ -49,16 +95,6 @@ public class Barbero extends Thread{
     
     
 
-    public synchronized void cortarPelo(String name) throws InterruptedException {
-        if(isAsSleep){
-            vent.logTextArea.append(this.nombre+": Despertó \n");
-            isAsSleep=false;
-        }
-        isBussy = true;
-        vent.logTextArea.append(this.nombre+ ": Cortando el pelo a Cliente " + name+"\n");
-        this.sleep(10000);
-        vent.logTextArea.append(this.nombre+ ": Terminó de cortar el pelo a Cliente "+ name+"\n");
-        isBussy = false;
-    }
+    
     
 }

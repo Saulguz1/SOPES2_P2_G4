@@ -137,13 +137,12 @@ public class Ventana extends javax.swing.JFrame {
         Cliente c = new Cliente(barberia);
         c.start();
         Runnable tarea1 = () ->{
-
             while (true){
                 try {
                     
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
                     logTextArea.append("ingreso un nuevo cliente\n");
-                    verificarcola(c);
+                    verificarcola(barberia);
                     id++;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -189,7 +188,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
     }
-    public void verificarcola(Cliente c){
+    public void verificarcola(Barberia c){
         if(c.cola.size()>20){
             logTextArea.append("Cliente "+id+": Hasta la proxima\n");
         }else{
