@@ -13,6 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Ventana extends javax.swing.JFrame {
 
+    public boolean band = true;
+    ReentrantLock lock = new ReentrantLock();
+
     /**
      * Creates new form Ventana
      */
@@ -58,6 +61,7 @@ public class Ventana extends javax.swing.JFrame {
         bt3 = new javax.swing.JButton();
         bt1 = new javax.swing.JButton();
         bt2 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,7 +110,7 @@ public class Ventana extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jLabel4.setText("FILOSOFOS PENSANTES");
 
-        jLabel5.setText("Tiempo Sleep (Ej: 10000)");
+        jLabel5.setText("Tiempo Sleep (Ej: 5000)");
 
         plat1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sopes2_problema1_filosofos/plato.jpg"))); // NOI18N
 
@@ -147,6 +151,13 @@ public class Ventana extends javax.swing.JFrame {
 
         bt2.setBackground(new java.awt.Color(153, 255, 153));
         bt2.setText("Pensar");
+
+        jButton2.setText("PARAR");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelprincipalLayout = new javax.swing.GroupLayout(Panelprincipal);
         Panelprincipal.setLayout(PanelprincipalLayout);
@@ -234,7 +245,9 @@ public class Ventana extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addComponent(textsleep, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelprincipalLayout.setVerticalGroup(
@@ -248,7 +261,8 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(PanelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(textsleep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(PanelprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -335,19 +349,27 @@ public class Ventana extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+
         Ventana vent = this;
+        vent.band = true;
+        this.logarea.setText("");
         int nums = Integer.parseInt(this.textsleep.getText());
         Mesa mesafilosofos = new Mesa();
-        for(int i=0; i<5; i++){
-            Filosofo filosofo = new Filosofo(nums,vent,i, mesafilosofos);
+        for (int i = 0; i < 5; i++) {
+            Filosofo filosofo = new Filosofo(nums, vent, i, mesafilosofos);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        this.band = false;
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-      
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Ventana().setVisible(true);
@@ -355,12 +377,10 @@ public class Ventana extends javax.swing.JFrame {
         });
     }
 
-    void Imprimir(String cadena){
-        ReentrantLock lock = new ReentrantLock();
+    void Imprimir(String cadena) {
         lock.lock();
         logarea.append(cadena);
         lock.unlock();
-        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel Panelprincipal;
@@ -375,6 +395,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel fil4;
     private javax.swing.JLabel fil5;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

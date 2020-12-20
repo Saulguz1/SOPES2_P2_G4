@@ -24,7 +24,7 @@ public class Filosofo implements Runnable {
 
     public Filosofo(int ns, Ventana ven, int n, Mesa mesa) {
         this.nofilosofo = n;
-        this.nsleep = ((int) (Math.random() * ns));
+        this.nsleep = ns;
         this.mesa = mesa;
         this.vent = ven;
         tenedorizq = mesa.ObtenerTenedorIzquierdo(nofilosofo);
@@ -35,12 +35,13 @@ public class Filosofo implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (vent.band) {
             //Sentarse a pensar
             try {
                 vent.Imprimir("Filosofo No." + (nofilosofo + 1) + " Se sento a pensar \n");
-                hilo.sleep(nsleep);
+                hilo.sleep((int) ( nsleep));
                 vent.Imprimir("Filosofo No." + (nofilosofo + 1) + " Le dio hambre\n");
+               // hilo.sleep(nsleep);
                 //Agarrar tenedor y verificar que estan disponible
                 //PARA RESOLVER EL DEADLOCK DONDE TODOS LOS FILOSOFOS AGARRAN EL IZQUIERDO AL MISMO TIEMPO
                 Tenedor tenizq = mesa.ObtenerTen(tenedorizq);
@@ -48,11 +49,11 @@ public class Filosofo implements Runnable {
                 
                 int dispder = 1;
                 int dispizq = 1;
-                
+                //Resolucion de bloque en cola de tenedor
                 if ((nofilosofo+1) == 5) {
                     dispder = tender.Usartenedor(vent, nofilosofo);
                     dispizq = tenizq.Usartenedor(vent, nofilosofo);
-
+                    
                 } else {
                     dispizq = tenizq.Usartenedor(vent, nofilosofo);
                     dispder = tender.Usartenedor(vent, nofilosofo);
@@ -68,13 +69,14 @@ public class Filosofo implements Runnable {
 
                     } else {
                         if (dispder == 0) {
-                            dejtenizq.SoltarTenedor(vent, nofilosofo);
+                            dejtenizq.SoltarTenedor(vent, nofilosofo);                         
                         }
                         if (dispizq == 0) {
                             dejtender.SoltarTenedor(vent, nofilosofo);
+                            
                         }
                     }
-                    //hilo.sleep(nsleep);
+                   // hilo.sleep(nsleep);
                 } else {
                     //Empieza a Comer 
                     
@@ -114,13 +116,14 @@ public class Filosofo implements Runnable {
                             break;
                     }
 
-                    hilo.sleep(nsleep);
+                    hilo.sleep((int) (Math.random()* nsleep));
                     // Termino de comer suelta los tenedores               
                     vent.Imprimir("Filosofo No." + (nofilosofo + 1) + " termino de comer\n");
                     Tenedor dejtenizq = mesa.ObtenerTen(tenedorizq);
                     Tenedor dejtender = mesa.ObtenerTen(tenedorder);
                     dejtenizq.SoltarTenedor(vent, nofilosofo);
                     dejtender.SoltarTenedor(vent, nofilosofo);
+                   // hilo.sleep(nsleep);
                     switch (nofilosofo + 1) {
                         case 1:
                             vent.ten1.setVisible(true);
