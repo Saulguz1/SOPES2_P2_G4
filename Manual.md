@@ -221,46 +221,46 @@ de la sala de espera. Si no hay sillas disponibles, entonces el cliente se va de
 
     - > Proceso concurrente para simular la llegada de un cliente a la barbería.
 
-    ![foto](./images/barb2.png)
+    ![foto](./images/barb2.PNG)
 
     - > Proceso concurrente para enviar a un barbero a cortar el pelo de un cliente.
     
-    ![foto](./images/barb1.png)
+    ![foto](./images/barb1.PNG)
     
     - > Proceso concurrente para actualizar la información de la cola de clientes.
     
-    ![foto](./images/barb3.png)
+    ![foto](./images/barb3.PNG)
 
 - ## Cómo se realizó la comunicación y sincronización entre procesos.
     - > La clase Barbería incluye los dos barberos y la cola de clientes.
 
-    ![foto](./images/barb4.png)
+    ![foto](./images/barb4.PNG)
     
     - > La clase Barbero recibe como parámetro una barbería.
     
-    ![foto](./images/barb5.png)
+    ![foto](./images/barb5.PNG)
     
     - > El método CortarPelo se sincroniza con el hilo de baberos para indicar cuando realizar la acción.
     
-    ![foto](./images/barb6.png)
+    ![foto](./images/barb6.PNG)
 
 - ## Situaciones en las cuáles era posible que se dieran: deadlocks, condiciones de carrera, etc y cómo se solucionaron.
     - > En caso de que los dos barberos estuviesen libres, se verificar la cola para que no exista el problema de querer atender al mismo cliente a la vez.
     
-    ![foto](./images/barb7.png)
+    ![foto](./images/barb7.PNG)
     
     - > Este método verifica que no se exceda la cola de los clientes.
     
-    ![foto](./images/barb8.png)
+    ![foto](./images/barb8.PNG)
 
 - ## Variables o datos que era necesario compartir entre procesos.
     - > Variables de la clase Barbero para verificar cuando está dormido u ocupado. Variable vent para acceder a los componentes de Ventana que es la interfaz gráfica.
     
-    ![foto](./images/barb9.png)
+    ![foto](./images/barb9.PNG)
     
     - > Variables de la clase Barbería, que represnetan los 2 barberos y la cola de clientes en espera.
     
-    ![foto](./images/barb10.png)
+    ![foto](./images/barb10.PNG)
 
 - ## Diagrama con imágenes del desarrollo del problema
 
