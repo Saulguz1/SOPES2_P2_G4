@@ -205,52 +205,66 @@ filósofos no pueden utilizar el mismo tenedor a la vez
 # Problema 3 : Barberos Dormilones
 
 - ## Descripcion
-    > descripcion
+    > Existe una barbería en donde existen 2 barberos que la atienden y cortan el cabello a los
+clientes que llegan y cuando no hay ninguno, se ponen a dormir. Los barberos tienen una
+silla para cortar el cabello que es donde atiende a un cliente y una sala de espera con 20
+sillas en donde pueden sentarse los clientes que llegan mientras esperan. Cuando un
+barbero termina de cortar el cabello a un cliente, regresa a la sala de espera a ver si hay
+personas esperando, si las hay trae consigo a una persona para cortarle el cabello. Si no
+hay clientes esperando, se pone a dormir en la silla para cortar cabello.
+Cada cliente que llega a la barbería observa lo que los barberos están haciendo. Si algún
+barbero se encuentra durmiendo, el cliente lo despierta y se sienta en la silla para cortar el
+cabello. Si los barberos se encuentran ocupados, entonces el cliente se coloca en una silla
+de la sala de espera. Si no hay sillas disponibles, entonces el cliente se va del lugar.
 
 - ## Partes del programa en donde existieron múltiples procesos trabajando de forma concurrente y/o paralela, codigo y descripcion.
 
-    - > parte
+    - > Proceso concurrente para simular la llegada de un cliente a la barbería.
 
-    ![foto](./images/foto.png)
+    ![foto](./images/barb2.png)
 
-    - > parte
+    - > Proceso concurrente para enviar a un barbero a cortar el pelo de un cliente.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb1.png)
     
-    - > parte
+    - > Proceso concurrente para actualizar la información de la cola de clientes.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb3.png)
 
 - ## Cómo se realizó la comunicación y sincronización entre procesos.
-    - > explicacion
+    - > La clase Barbería incluye los dos barberos y la cola de clientes.
 
-    ![foto](./images/foto.png)
+    ![foto](./images/barb4.png)
     
-    - > explicacion
+    - > La clase Barbero recibe como parámetro una barbería.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb5.png)
+    
+    - > El método CortarPelo se sincroniza con el hilo de baberos para indicar cuando realizar la acción.
+    
+    ![foto](./images/barb6.png)
 
 - ## Situaciones en las cuáles era posible que se dieran: deadlocks, condiciones de carrera, etc y cómo se solucionaron.
-    - > explicacion
+    - > En caso de que los dos barberos estuviesen libres, se verificar la cola para que no exista el problema de querer atender al mismo cliente a la vez.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb7.png)
     
-    - > explicacion
+    - > Este método verifica que no se exceda la cola de los clientes.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb8.png)
 
 - ## Variables o datos que era necesario compartir entre procesos.
-    - > explicacion
+    - > Variables de la clase Barbero para verificar cuando está dormido u ocupado. Variable vent para acceder a los componentes de Ventana que es la interfaz gráfica.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb9.png)
     
-    - > explicacion
+    - > Variables de la clase Barbería, que represnetan los 2 barberos y la cola de clientes en espera.
     
-    ![foto](./images/foto.png)
+    ![foto](./images/barb10.png)
+
 - ## Diagrama con imágenes del desarrollo del problema
 
-    ![foto](./images/foto.png)
+    ![foto](./images/barabdiag.png)
 
 ---
 ---
-
