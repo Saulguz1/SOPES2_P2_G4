@@ -79,18 +79,54 @@ public class Barbero extends Thread{
         if(barber.isAsSleep()){
             vent.logTextArea.append(barber.getNombre()+": Despertó \n");
             barber.isAsSleep=false;
+            if(barber.getNombre().equals("Barbero 1")){
+                vent.wakeB1Icon.setVisible(true);
+                sleep(500);
+                vent.wakeB1Icon.setVisible(false);
+                vent.sleepB1Icon.setVisible(false);
+            }else if(barber.getNombre().equals("Barbero 2")){
+                vent.wakeB2Icon.setVisible(true);
+                sleep(500);
+                vent.wakeB2Icon.setVisible(false);
+                vent.sleepB2Icon.setVisible(false);
+            }
         }
         barber.isBussy = true;
         vent.logTextArea.append(barber.getNombre()+ ": Cortando el pelo a Cliente " + name+"\n");
-        sleep(10000);
+        if(nombre.equals("Barbero 1")){
+            vent.corteB1Icon.setVisible(true);
+            vent.corteB1Text.setText("Cliente "+name);
+        }else if(nombre.equals("Barbero 2")){
+            vent.corteB2Icon.setVisible(true);
+            vent.corteB2Text.setText("Cliente "+name);
+        }
+        sleep(vent.sleepcorte);
         vent.logTextArea.append(barber.getNombre()+ ": Terminó de cortar el pelo a Cliente "+ name+"\n");
         barber.isBussy = false;
+        if(nombre.equals("Barbero 1")){
+            vent.corteB1Icon.setVisible(false);    
+            vent.corteB1Text.setText("");
+        }else if(nombre.equals("Barbero 2")){
+            vent.corteB2Icon.setVisible(false);
+            vent.corteB2Text.setText("");
+        }
+        vent.salidaIcon.setVisible(true);
+        vent.salidaText.setText("Cliente "+name+" satisfecho");
+        sleep(500);
+        vent.salidaIcon.setVisible(false);
+        vent.salidaText.setText("Salida Exitosa");
+        
     }
     
     public synchronized void dormir() throws InterruptedException {
         vent.logTextArea.append(this.nombre+": Vuelve al cuaje \n");
         isAsSleep = true;
         isBussy = false;
+        if(nombre.equals("Barbero 1")){
+            vent.sleepB1Icon.setVisible(true);
+        }else if(nombre.equals("Barbero 2")){
+            vent.sleepB2Icon.setVisible(true);
+        }
     }
     
     
