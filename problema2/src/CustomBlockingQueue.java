@@ -1,9 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -28,8 +26,12 @@ public class CustomBlockingQueue {
                  * persona debe esperar para colocar nueva caja
                  */
                 System.out.println("Estantería llena, espere un espacio vacío.");
-                entrada.setText("No. Personas: " +  lock.getHoldCount());
+                waitingPushersCounter++;
+                entrada.setText("Personas en cola: " +  waitingPushersCounter);
                 putCondition.await();
+            }
+            if (waitingPushersCounter >0) {
+                waitingPushersCounter--;
             }
 
             System.out.println("Colocando - " + caja + " en posición " +  this.estanteria.size());
@@ -37,9 +39,9 @@ public class CustomBlockingQueue {
             fillTable(estanteria);
             System.out.println(this.estanteria.toString());
 
-            entrada.setText("No. Personas: " +  lock.getHoldCount());
+            entrada.setText("Personas en cola: " +  waitingPushersCounter);
 
-            pullCondition.signalAll();
+            pullCondition.signal();
         } finally {
             lock.unlock();
         }
@@ -54,25 +56,26 @@ public class CustomBlockingQueue {
                  * persona debe esperar nueva caja
                  */
                 System.out.println("Estantería vacía, espere una nueva caja.");
-                salida.setText("No. Personas: " +  lock.getQueueLength());
+                waitingPullersCounter++;
+                salida.setText("Personas en cola: " +  waitingPullersCounter);
                 pullCondition.await();
             }
+            if (waitingPullersCounter > 0) {
+                waitingPullersCounter--;
+            }
 
-            int caja = (int) this.estanteria.remove(0);
+            int caja = (int) this.estanteria.remove();
             fillTable(estanteria);
             System.out.println("Recogiendo - " + caja + " de posición 0");
             System.out.println(this.estanteria.toString());
-            salida.setText("No. Personas: " +  lock.getQueueLength());
+            salida.setText("Personas en cola: " +  waitingPullersCounter);
 
-            putCondition.signalAll();
+            putCondition.signal();
             return caja;
         } finally {
             lock.unlock();
         }
     }
-
-
-    private List queue = new LinkedList();
 
     public synchronized void putBox(int item, JTable estanteria, JLabel entrada, JLabel salida)
             throws InterruptedException  {
@@ -88,9 +91,9 @@ public class CustomBlockingQueue {
         fillTable(estanteria);
         System.out.println(this.estanteria.toString());
         if(this.estanteria.size() == 1) {
-            waitingPushersCounter=0;
+            waitingPushersCounter--;
             entrada.setText("Personas en cola: " +  waitingPushersCounter);
-            this.notifyAll();
+            this.notify();
         }
     }
 
@@ -104,9 +107,9 @@ public class CustomBlockingQueue {
             this.wait();
         }
         if(this.estanteria.size() == this.limit){
-            waitingPullersCounter=0;
+            waitingPullersCounter--;
             salida.setText("Personas en cola: " +  waitingPullersCounter);
-            this.notifyAll();
+            this.notify();
         }
 
         int caja = (int) this.estanteria.remove();

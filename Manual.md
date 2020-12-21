@@ -153,51 +153,61 @@ filósofos no pueden utilizar el mismo tenedor a la vez
 # Problema 2: Centro de Acopio
 
 - ## Descripcion
-    > descripcion
+    > Se tiene un centro en el cual se reciben y se entregan cajas con productos, el centro tiene una estantería con una capacidad máxima de 20 cajas. Existen dos puertas grandes: una para las personas que llegan a dejar su respectiva caja (cada persona lleva solamente 1 caja) y la otra para las que llegan a retirar (cada persona puede retirar solamente 1 caja).
+  Múltiples personas pueden llegar al mismo tiempo al centro de acopio y pueden simultáneamente colocar cada una de ellas su caja en los lugares vacíos de la estantería, si la estantería está llena no pueden entregar sus cajas y deben esperar a que lleguen personas a recoger para que existan espacios vacíos para colocar las caja que llevan. De una forma similar, múltiples personas pueden llegar al centro y simultáneamente retirar cada una de ellas una caja de la estantería, si la estantería está vacía deben esperar a que lleguen personas a dejar cajas para entonces retirar.
+  Se debe modelar y desarrollar un sistema capaz de representar este comportamiento con las restricciones del negocio que sean obvias y lógicas, algunos ejemplos de estas son:
+  > - Múltiples personas no pueden colocar su caja en el mismo espacio de la estantería.
+  > - Múltiples personas no pueden retirar la misma caja de la estantería.
 
 - ## Partes del programa en donde existieron múltiples procesos trabajando de forma concurrente y/o paralela, codigo y descripcion.
 
-    - > parte
+    - > Proceso concurrente: Cuando se quita una caja de la estantería
 
-    ![foto](./images/foto.png)
+    ![foto](./images/ca3.png)
 
-    - > parte
-    
-    ![foto](./images/foto.png)
-    
-    - > parte
-    
-    ![foto](./images/foto.png)
+    - > Proceso concurrente: cuando se coloca una caja en la estantería.
+
+    ![foto](./images/ca2.png)
 
 - ## Cómo se realizó la comunicación y sincronización entre procesos.
-    - > explicacion
+    - > Se creó una especie de BlockingQueue custom para simular la estantería y para poder manejar la
+      entrada y salida de cajas de manera que cuando la estantería este vacía el proceso que remueve
+      cajas tenga que esperar a que exista al menos una caja, y el proceso que agrega cajas
+      pueda hacerlo solo cuando existan espacios disponibles.
 
-    ![foto](./images/foto.png)
+    ![foto](./images/ca1.png)
     
-    - > explicacion
-    
-    ![foto](./images/foto.png)
+    - > La sincronización se manejo utilizando el modificador _synchronized_ en las funciones
+      que se encargan de colocar y remover cajas de la estantería.
+      Si la estantería estaba vacía, el método para remover cajas entraba se pone en espera
+      hasta que exista alguna caja en la estantería.
+      De forma contraria para el método que coloca cajas, si la estantería está llena, se coloca
+      en espera y se despierta hasta que la estantería esté vacía
+      
+    ![foto](./images/ca4.png)
+    ![foto](./images/ca5.png)
 
 - ## Situaciones en las cuáles era posible que se dieran: deadlocks, condiciones de carrera, etc y cómo se solucionaron.
-    - > explicacion
-    
-    ![foto](./images/foto.png)
-    
-    - > explicacion
-    
-    ![foto](./images/foto.png)
+    - > Debido a la naturaleza de la Custom Blocking queue creada, los deadlocks
+      no son posibles en este escenario.
+      
 
 - ## Variables o datos que era necesario compartir entre procesos.
-    - > explicacion
-    
-    ![foto](./images/foto.png)
-    
-    - > explicacion
-    
-    ![foto](./images/foto.png)
+    - > Las variables necesarias en los procesos son:
+      - lock: de tipo ReentrantLock, para manejar los bloqueos de las funciones para agregar o remover cajas de las estantería.
+      - putCondition: de tipo Condition, para manejar las señales que se envían a los procesos que agregan cajas y están en espera para poder actuar.
+      - pullCondition: de tipo Condition, para manejar las señales que se envían a los procesos que remueven cajas y están en espera para poder actuar.
+      - customBlockingQueue: de tipo CustomBlockingQueue, para simular una BlockingQueue y la estantería en la que se colocan las cajas.
+      - estantería: de tipo JTable, para visualizar gráficamente la colocación y remoción de cajas.
+      - entrada: de tipo JLabel, para mostrar el número de personas en cola de entrada.
+      - salida: de tipo JLabel, para mostrar el número de personas en cola de salida.
+      
+    ![foto](./images/ca6.png)
+    ![foto](./images/ca7.png)
+  
 - ## Diagrama con imágenes del desarrollo del problema
 
-    ![foto](./images/foto.png)
+    ![foto](./images/flujoPractica2.png)
 
 ---
 ---

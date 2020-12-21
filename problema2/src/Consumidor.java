@@ -19,8 +19,8 @@ public class Consumidor implements Runnable {
     public void run() {
         for (int i = 1; i <= 100; i++) {
             try {
-                customBlockingQueue.pullBox(estanteria, entrada, salida);
-                TimeUnit.MILLISECONDS.sleep(random.nextInt(1500));
+                customBlockingQueue.quitarCaja(estanteria, entrada, salida);
+                TimeUnit.MILLISECONDS.sleep(random.nextInt(2000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

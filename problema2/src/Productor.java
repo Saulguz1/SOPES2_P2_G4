@@ -20,7 +20,7 @@ public class Productor implements Runnable {
     public void run() {
         for (int i = 1; i <= 100; i++) {
             try {
-                customBlockingQueue.putBox(i, estanteria, entrada, salida);
+                customBlockingQueue.colocarCaja(i, estanteria, entrada, salida);
                 TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
